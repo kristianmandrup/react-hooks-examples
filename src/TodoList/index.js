@@ -9,21 +9,28 @@ function useImmerReducer(reducer, initialState) {
   return React.useReducer(produce(reducer), initialState);
 }
 
-function createReducers(todos, action) {
+// allows testing of each reducer function :)
+export function add({ list = [], text }) {
+  list.unshift({ text: text, complete: false });
+}
+
+export function toggleStatus({ list = [], index }) {
+  list[index].complete = !list[index].complete;
+}
+
+export function reset() {
+  return [];
+}
+
+export function createReducers(todos, action) {
   return {
-    add(list = todos, text = action.text) {
-      list.unshift({ text: action.text, complete: false });
-    },
-    toggleStatus(list = todos, index = action.i) {
-      list[action.i].complete = !todos[action.i].complete;
-    },
-    reset() {
-      return [];
-    }
+    add: () => add({ list: todos, text: action.text }),
+    toggleStatus: () => toggleStatus({ list: todos, index: action.i }),
+    reset: () => reset()
   };
 }
 
-const todosReducer = (todos, action) => {
+export const todosReducer = (todos, action) => {
   const reducers = createReducers(todos, action);
   const reducer = reducers[action.type];
   return reducer() || todos;
