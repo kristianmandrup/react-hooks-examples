@@ -13,11 +13,9 @@ function createReducers(todos, action) {
   return {
     add(list = todos, text = action.text) {
       list.unshift({ text: action.text, complete: false });
-      return;
     },
     toggleStatus(list = todos, index = action.i) {
       list[action.i].complete = !todos[action.i].complete;
-      return;
     },
     reset() {
       return [];
