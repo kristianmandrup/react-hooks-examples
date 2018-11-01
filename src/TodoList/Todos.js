@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { TodoContext } from "./TodoContext";
+import { actions } from "./actions";
 
 export default () => {
   const { todos, dispatch } = useContext(TodoContext);
@@ -9,7 +10,7 @@ export default () => {
       {todos.map(({ text, complete }, i) => (
         <div
           key={text}
-          onClick={() => dispatch({ type: "TOGGLE_COMPLETE", i })}
+          onClick={() => dispatch(actions.toggleStatus(i))}
           style={{
             textDecoration: complete ? "line-through" : ""
           }}

@@ -2,25 +2,33 @@ import React from "react";
 import { produce } from "immer";
 import TodoView from "./TodoView";
 import { TodoContext } from "./TodoContext";
+// import { reset } from "ansi-colors";
 
 // https://github.com/mweststrate/use-immer/blob/master/index.js
 function useImmerReducer(reducer, initialState) {
   return React.useReducer(produce(reducer), initialState);
 }
 
-const todosReducer = (todos, action) => {
-  switch (action.type) {
-    case "ADD_TODO":
-      todos.unshift({ text: action.text, complete: false });
+function createReducers(todos, action) {
+  return {
+    add(list = todos, text = action.text) {
+      list.unshift({ text: action.text, complete: false });
       return;
-    case "TOGGLE_COMPLETE":
-      todos[action.i].complete = !todos[action.i].complete;
+    },
+    toggleStatus(list = todos, index = action.i) {
+      list[action.i].complete = !todos[action.i].complete;
       return;
-    case "RESET":
+    },
+    reset() {
       return [];
-    default:
-      return todos;
-  }
+    }
+  };
+}
+
+const todosReducer = (todos, action) => {
+  const reducers = createReducers(todos, action);
+  const reducer = reducers[action.type];
+  return reducer() || todos;
 };
 
 export default () => {

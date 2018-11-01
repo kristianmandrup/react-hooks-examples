@@ -1,5 +1,6 @@
 import React from "react";
 import { TodoContext } from "./TodoContext";
+import { actions } from "./actions";
 
 export default class Form extends React.PureComponent {
   static contextType = TodoContext;
@@ -16,7 +17,7 @@ export default class Form extends React.PureComponent {
       <form
         onSubmit={e => {
           e.preventDefault();
-          dispatch({ text, type: "ADD_TODO" });
+          dispatch(actions.add(text));
           this.setState({ text: "" });
         }}
       >
